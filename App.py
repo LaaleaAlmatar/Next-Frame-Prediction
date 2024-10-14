@@ -31,23 +31,23 @@ def main():
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
     if uploaded_file is not None:
-    # Read the uploaded image
-    image = cv2.imdecode(np.frombuffer(uploaded_file.read(), np.uint8), cv2.IMREAD_COLOR)
-    
-    # Convert BGR to RGB for correct color display
-    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    
-    # Display the uploaded image with correct colors
-    st.image(image_rgb, caption='Uploaded Image', use_column_width=True)
-    
-    # Display image details
-    st.write(f"Image shape: {image.shape}")
-    
-    # Add progress bar
-    if st.button('Predict Next Frame'):
-        with st.spinner('Predicting...'):
-            predicted_frame = predict_next_frame(image)
-            st.image(predicted_frame, caption='Predicted Next Frame', use_column_width=True)
+        # Read the uploaded image
+        image = cv2.imdecode(np.frombuffer(uploaded_file.read(), np.uint8), cv2.IMREAD_COLOR)
+        
+        # Convert BGR to RGB for correct color display
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        # Display the uploaded image with correct colors
+        st.image(image_rgb, caption='Uploaded Image', use_column_width=True)
+        
+        # Display image details
+        st.write(f"Image shape: {image.shape}")
+        
+        # Add progress bar
+        if st.button('Predict Next Frame'):
+            with st.spinner('Predicting...'):
+                predicted_frame = predict_next_frame(image)
+                st.image(predicted_frame, caption='Predicted Next Frame', use_column_width=True)
 
 if __name__ == "__main__":
     main()
