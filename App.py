@@ -24,7 +24,7 @@ def predict_next_frame(image):
     return (predicted_frame[0] * 255).astype(np.uint8)  # Rescale to 0-255
 
 def main():
-    st.title("Satellite Image Next Frame Prediction App")
+    st.title("Satellite Image Next Frame Prediction Website")
     
     st.markdown("Upload a satellite image, and this app will predict the next frame based on your input using a GAN model.")
     
@@ -37,9 +37,6 @@ def main():
         # Convert BGR to RGB for correct color display
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         
-        # Display the uploaded image with correct colors
-        st.image(image_rgb, caption='Uploaded Image', use_column_width=True)
-        
         # Display image details
         st.write(f"Image shape: {image.shape}")
         
@@ -47,7 +44,15 @@ def main():
         if st.button('Predict Next Frame'):
             with st.spinner('Predicting...'):
                 predicted_frame = predict_next_frame(image)
-                st.image(predicted_frame, caption='Predicted Next Frame', use_column_width=True)
+                
+                # Display images side by side
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.image(image_rgb, caption='Uploaded Image', use_column_width=True)
+                
+                with col2:
+                    st.image(predicted_frame, caption='Predicted Next Frame', use_column_width=True)
 
 if __name__ == "__main__":
     main()
