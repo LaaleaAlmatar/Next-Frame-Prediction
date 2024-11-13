@@ -17,11 +17,15 @@ def preprocess_image(image):
     image = image / 255.0  # Normalize pixel values
     return np.expand_dims(image, axis=0)  # Add batch dimension
 
-def predict_next_frame(image):
+def predict_next_frame(image, original_size):
     # Predict the next frame using the loaded model
     processed_image = preprocess_image(image)
     predicted_frame = model.predict(processed_image)
-    return (predicted_frame[0] * 255).astype(np.uint8)  # Rescale to 0-255
+    
+    # Rescale pixel values and resize to original dimensions
+    predicted_frame = (predicted_frame[0] * 255).astype(np.uint8)  # Rescale to 0-255
+    predicted_frame = cv2.resize(predicted_frame, (original_size[1], original_size[0]))  # Resize back to original size
+    return predicted_frame
 
 def main():
     st.title("Satellite Image Next Frame Prediction Website")
@@ -43,7 +47,8 @@ def main():
         # Add progress bar
         if st.button('Predict Next Frame'):
             with st.spinner('Predicting...'):
-                predicted_frame = predict_next_frame(image)
+                original_size = image.shape[:2]  # Store original size
+                predicted_frame = predict_next_frame(image, original_size)
                 
                 # Display images side by side
                 col1, col2 = st.columns(2)
